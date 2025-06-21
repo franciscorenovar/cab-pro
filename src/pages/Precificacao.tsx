@@ -3,6 +3,10 @@ import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Produtos from "./precificacao/Produtos";
+import CustosFixos from "./precificacao/CustosFixos";
+import Servicos from "./precificacao/Servicos";
+import Listagem from "./precificacao/Listagem";
 
 const Precificacao = () => {
   const [activeTab, setActiveTab] = useState("produtos");
@@ -17,55 +21,15 @@ const Precificacao = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "produtos":
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle style={{ color: '#31144A' }}>Cadastro de Produtos</CardTitle>
-              <CardDescription>Gerencie seus produtos e materiais</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Módulo de produtos em desenvolvimento...</p>
-            </CardContent>
-          </Card>
-        );
+        return <Produtos />;
       case "custos-fixos":
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle style={{ color: '#31144A' }}>Custos Fixos</CardTitle>
-              <CardDescription>Configure seus custos mensais</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Módulo de custos fixos em desenvolvimento...</p>
-            </CardContent>
-          </Card>
-        );
+        return <CustosFixos />;
       case "servicos":
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle style={{ color: '#31144A' }}>Serviços</CardTitle>
-              <CardDescription>Configure seus serviços e preços</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Módulo de serviços em desenvolvimento...</p>
-            </CardContent>
-          </Card>
-        );
+        return <Servicos />;
       case "listagem":
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle style={{ color: '#31144A' }}>Listagem de Preços</CardTitle>
-              <CardDescription>Seu cardápio de serviços</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Módulo de listagem em desenvolvimento...</p>
-            </CardContent>
-          </Card>
-        );
+        return <Listagem />;
       default:
-        return null;
+        return <Produtos />;
     }
   };
 
@@ -73,10 +37,10 @@ const Precificacao = () => {
     <MainLayout>
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2" style={{ color: '#31144A' }}>
-          Módulo Precificação
+          Módulo de Precificação
         </h1>
         <p className="text-gray-600">
-          Gerencie produtos, custos e precifique seus serviços
+          Calcule preços justos para seus produtos e serviços
         </p>
       </div>
 

@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Agendamentos from "./agenda/Agendamentos";
+import Clientes from "./agenda/Clientes";
 
 const Agenda = () => {
   const [activeTab, setActiveTab] = useState("agendamentos");
@@ -15,31 +16,11 @@ const Agenda = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "agendamentos":
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle style={{ color: '#31144A' }}>Agendamentos</CardTitle>
-              <CardDescription>Gerencie sua agenda de horários</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Módulo de agendamentos em desenvolvimento...</p>
-            </CardContent>
-          </Card>
-        );
+        return <Agendamentos />;
       case "clientes":
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle style={{ color: '#31144A' }}>Cadastro de Clientes</CardTitle>
-              <CardDescription>Gerencie seus clientes</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Módulo de clientes em desenvolvimento...</p>
-            </CardContent>
-          </Card>
-        );
+        return <Clientes />;
       default:
-        return null;
+        return <Agendamentos />;
     }
   };
 
@@ -50,7 +31,7 @@ const Agenda = () => {
           Módulo Agenda
         </h1>
         <p className="text-gray-600">
-          Organize seus horários e clientes
+          Organize seus agendamentos e gerencie clientes
         </p>
       </div>
 

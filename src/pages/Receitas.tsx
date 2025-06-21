@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import AssinaturaApp from "./receitas/AssinaturaApp";
+import Indicacoes from "./receitas/Indicacoes";
 
 const Receitas = () => {
   const [activeTab, setActiveTab] = useState("assinatura");
@@ -15,31 +16,11 @@ const Receitas = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "assinatura":
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle style={{ color: '#31144A' }}>Assinatura do App</CardTitle>
-              <CardDescription>Gerencie sua assinatura mensal</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Módulo de assinatura em desenvolvimento...</p>
-            </CardContent>
-          </Card>
-        );
+        return <AssinaturaApp />;
       case "indicacoes":
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle style={{ color: '#31144A' }}>Programa de Indicações</CardTitle>
-              <CardDescription>Ganhe 33% de comissão das indicações</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Módulo de indicações em desenvolvimento...</p>
-            </CardContent>
-          </Card>
-        );
+        return <Indicacoes />;
       default:
-        return null;
+        return <AssinaturaApp />;
     }
   };
 
@@ -50,7 +31,7 @@ const Receitas = () => {
           Módulo Receitas
         </h1>
         <p className="text-gray-600">
-          Gerencie sua assinatura e indicações
+          Gerencie sua assinatura e programa de indicações
         </p>
       </div>
 

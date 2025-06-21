@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
@@ -9,6 +8,7 @@ import { ListaLancamentos } from "@/components/lancamentos/ListaLancamentos";
 import { useLancamentos } from "@/hooks/useLancamentos";
 import { Lancamento } from "@/types/lancamentos";
 import { useToast } from "@/hooks/use-toast";
+import Relatorios from "./financeiro/Relatorios";
 
 const Financeiro = () => {
   const [activeTab, setActiveTab] = useState("lancamentos");
@@ -78,15 +78,7 @@ const Financeiro = () => {
         );
       case "relatorios":
         return (
-          <Card>
-            <CardHeader>
-              <CardTitle style={{ color: '#31144A' }}>Relatórios Financeiros</CardTitle>
-              <CardDescription>Análise e exportação de dados</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Módulo de relatórios em desenvolvimento...</p>
-            </CardContent>
-          </Card>
+          <Relatorios />
         );
       default:
         return null;
