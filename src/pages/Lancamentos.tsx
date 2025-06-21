@@ -6,6 +6,7 @@ import { ListaLancamentos } from "@/components/lancamentos/ListaLancamentos";
 import { useLancamentos } from "@/hooks/useLancamentos";
 import { Lancamento } from "@/types/lancamentos";
 import { useToast } from "@/hooks/use-toast";
+import { MainLayout } from "@/components/layout/MainLayout";
 
 const Lancamentos = () => {
   const { toast } = useToast();
@@ -30,7 +31,6 @@ const Lancamentos = () => {
 
   const handleEdit = (lancamento: Lancamento) => {
     setLancamentoEditando(lancamento);
-    // Scroll to top para mostrar o formulário
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -51,32 +51,30 @@ const Lancamentos = () => {
   const resumo = calcularResumo();
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#F2F2F2' }}>
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2" style={{ color: '#31144A' }}>
-            Módulo Financeiro - Lançamentos
-          </h1>
-          <p className="text-gray-600">
-            Gerencie suas entradas e saídas financeiras de forma organizada
-          </p>
-        </div>
-
-        <ResumoFinanceiro resumo={resumo} />
-
-        <FormularioLancamento
-          onSubmit={handleSubmit}
-          lancamentoEditando={lancamentoEditando}
-          onCancelEdit={handleCancelEdit}
-        />
-
-        <ListaLancamentos
-          lancamentos={lancamentos}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+    <MainLayout>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2" style={{ color: '#31144A' }}>
+          Módulo Financeiro - Lançamentos
+        </h1>
+        <p className="text-gray-600">
+          Gerencie suas entradas e saídas financeiras de forma organizada
+        </p>
       </div>
-    </div>
+
+      <ResumoFinanceiro resumo={resumo} />
+
+      <FormularioLancamento
+        onSubmit={handleSubmit}
+        lancamentoEditando={lancamentoEditando}
+        onCancelEdit={handleCancelEdit}
+      />
+
+      <ListaLancamentos
+        lancamentos={lancamentos}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
+    </MainLayout>
   );
 };
 
