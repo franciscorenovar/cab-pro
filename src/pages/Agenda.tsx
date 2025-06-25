@@ -26,15 +26,6 @@ const Agenda = () => {
 
   return (
     <MainLayout>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2" style={{ color: '#31144A' }}>
-          Módulo Agenda
-        </h1>
-        <p className="text-gray-600">
-          Organize seus agendamentos e gerencie clientes
-        </p>
-      </div>
-
       <div className="flex flex-wrap gap-2 mb-6">
         {tabs.map((tab) => (
           <Button

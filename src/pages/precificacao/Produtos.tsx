@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
+import { Upload, Edit } from "lucide-react";
 
 interface Produto {
   id: string;
@@ -26,12 +27,18 @@ const Produtos = () => {
     valor: '',
     tipo: ''
   });
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const tiposProduto = [
-    { value: 'ampola', label: 'Ampola', divisor: 1 },
-    { value: 'frasco', label: 'Frasco', divisor: 10 },
-    { value: 'pote', label: 'Pote', divisor: 20 },
-    { value: 'tubo', label: 'Tubo', divisor: 15 }
+    { value: 'kit-tratamento', label: 'Kit Tratamento', divisor: 15 },
+    { value: 'quimica', label: 'Química', divisor: 50 },
+    { value: 'finalizador', label: 'Finalizador', divisor: 10 },
+    { value: 'shampoo', label: 'Shampoo', divisor: 15 },
+    { value: 'cond-masc-protei', label: 'Cond. Masc. Protei', divisor: 15 },
+    { value: 'po', label: 'Pó', divisor: 50 },
+    { value: 'ox', label: 'Ox', divisor: 100 },
+    { value: 'coloracao', label: 'Coloração', divisor: 1 },
+    { value: 'outros', label: 'Outros', divisor: 1 }
   ];
 
   const calcularCustoAplicacao = (quantidade: number, valor: number, tipo: string) => {
@@ -60,22 +67,52 @@ const Produtos = () => {
       formData.tipo
     );
 
-    const novoProduto: Produto = {
-      id: Date.now().toString(),
-      nome: formData.nome,
-      quantidade: Number(formData.quantidade),
-      valor: Number(formData.valor),
-      tipo: formData.tipo,
-      custoAplicacao
-    };
+    if (editingId) {
+      setProdutos(produtos.map(p => 
+        p.id === editingId 
+          ? {
+              ...p,
+              nome: formData.nome,
+              quantidade: Number(formData.quantidade),
+              valor: Number(formData.valor),
+              tipo: formData.tipo,
+              custoAplicacao
+            }
+          : p
+      ));
+      setEditingId(null);
+      toast({
+        title: "Sucesso",
+        description: "Produto atualizado com sucesso!"
+      });
+    } else {
+      const novoProduto: Produto = {
+        id: Date.now().toString(),
+        nome: formData.nome,
+        quantidade: Number(formData.quantidade),
+        valor: Number(formData.valor),
+        tipo: formData.tipo,
+        custoAplicacao
+      };
 
-    setProdutos([...produtos, novoProduto]);
+      setProdutos([...produtos, novoProduto]);
+      toast({
+        title: "Sucesso",
+        description: "Produto adicionado com sucesso!"
+      });
+    }
+
     setFormData({ nome: '', quantidade: '', valor: '', tipo: '' });
-    
-    toast({
-      title: "Sucesso",
-      description: "Produto adicionado com sucesso!"
+  };
+
+  const editarProduto = (produto: Produto) => {
+    setFormData({
+      nome: produto.nome,
+      quantidade: produto.quantidade.toString(),
+      valor: produto.valor.toString(),
+      tipo: produto.tipo
     });
+    setEditingId(produto.id);
   };
 
   const excluirProduto = (id: string) => {
@@ -84,6 +121,51 @@ const Produtos = () => {
       title: "Sucesso",
       description: "Produto excluído com sucesso!"
     });
+  };
+
+  const handleImportCSV = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target?.result as string;
+      const lines = text.split('\n');
+      const header = lines[0].split(',');
+      
+      const novosProdutos: Produto[] = [];
+      
+      for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',');
+        if (values.length >= 4) {
+          const nome = values[0]?.trim();
+          const tipo = values[1]?.trim();
+          const quantidade = Number(values[2]?.trim());
+          const valor = Number(values[3]?.trim());
+          
+          if (nome && tipo && quantidade && valor) {
+            const custoAplicacao = calcularCustoAplicacao(quantidade, valor, tipo);
+            novosProdutos.push({
+              id: Date.now().toString() + i,
+              nome,
+              tipo,
+              quantidade,
+              valor,
+              custoAplicacao
+            });
+          }
+        }
+      }
+      
+      setProdutos([...produtos, ...novosProdutos]);
+      toast({
+        title: "Sucesso",
+        description: `${novosProdutos.length} produtos importados com sucesso!`
+      });
+    };
+    
+    reader.readAsText(file);
+    event.target.value = '';
   };
 
   const formatCurrency = (value: number) => {
@@ -95,19 +177,14 @@ const Produtos = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold mb-2" style={{ color: '#31144A' }}>
-          Produtos
-        </h2>
-        <p className="text-gray-600">
-          Cadastre seus produtos e calcule o custo por aplicação
-        </p>
-      </div>
-
       <Card>
         <CardHeader style={{ backgroundColor: '#F2F2F2' }}>
-          <CardTitle style={{ color: '#31144A' }}>Novo Produto</CardTitle>
-          <CardDescription>Adicione um novo produto ao seu estoque</CardDescription>
+          <CardTitle style={{ color: '#31144A' }}>
+            {editingId ? 'Editar Produto' : 'Novo Produto'}
+          </CardTitle>
+          <CardDescription>
+            {editingId ? 'Edite os dados do produto' : 'Adicione um novo produto ao seu estoque'}
+          </CardDescription>
         </CardHeader>
         <CardContent className="p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -118,7 +195,7 @@ const Produtos = () => {
                   id="nome"
                   value={formData.nome}
                   onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                  placeholder="Ex: Shampoo Hydra"
+                  placeholder="Ex: Progressiva Premium"
                 />
               </div>
 
@@ -145,7 +222,7 @@ const Produtos = () => {
                   type="number"
                   value={formData.quantidade}
                   onChange={(e) => setFormData({ ...formData, quantidade: e.target.value })}
-                  placeholder="Ex: 500"
+                  placeholder="Ex: 1000"
                 />
               </div>
 
@@ -157,19 +234,60 @@ const Produtos = () => {
                   step="0.01"
                   value={formData.valor}
                   onChange={(e) => setFormData({ ...formData, valor: e.target.value })}
-                  placeholder="0,00"
+                  placeholder="300,00"
                 />
               </div>
             </div>
 
-            <Button 
-              type="submit" 
-              style={{ backgroundColor: '#7B539D', color: 'white' }}
-              className="hover:opacity-90"
-            >
-              Adicionar Produto
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                type="submit" 
+                style={{ backgroundColor: '#7B539D', color: 'white' }}
+                className="hover:opacity-90"
+              >
+                {editingId ? 'Atualizar Produto' : 'Adicionar Produto'}
+              </Button>
+              
+              {editingId && (
+                <Button 
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setEditingId(null);
+                    setFormData({ nome: '', quantidade: '', valor: '', tipo: '' });
+                  }}
+                >
+                  Cancelar
+                </Button>
+              )}
+            </div>
           </form>
+
+          <div className="mt-4 pt-4 border-t">
+            <Label htmlFor="csv-import" className="block mb-2">Importar Planilha CSV</Label>
+            <div className="flex items-center gap-2">
+              <Input
+                id="csv-import"
+                type="file"
+                accept=".csv"
+                onChange={handleImportCSV}
+                className="hidden"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => document.getElementById('csv-import')?.click()}
+                style={{ borderColor: '#D2B360', color: '#D2B360' }}
+                className="hover:bg-yellow-50"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Importar CSV
+              </Button>
+              <span className="text-sm text-gray-500">
+                Formato: Nome,Tipo,Quantidade,Valor
+              </span>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
@@ -207,15 +325,26 @@ const Produtos = () => {
                       {formatCurrency(produto.custoAplicacao)}
                     </TableCell>
                     <TableCell className="text-center">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => excluirProduto(produto.id)}
-                        style={{ borderColor: '#522A71', color: '#522A71' }}
-                        className="hover:bg-red-50"
-                      >
-                        Excluir
-                      </Button>
+                      <div className="flex gap-1 justify-center">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => editarProduto(produto)}
+                          style={{ borderColor: '#7B539D', color: '#7B539D' }}
+                          className="hover:bg-purple-50"
+                        >
+                          <Edit className="w-3 h-3" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => excluirProduto(produto.id)}
+                          style={{ borderColor: '#522A71', color: '#522A71' }}
+                          className="hover:bg-red-50"
+                        >
+                          Excluir
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { Edit } from "lucide-react";
 
 interface CustoFixo {
   id: string;
@@ -13,33 +14,58 @@ interface CustoFixo {
   isPredefinido: boolean;
 }
 
+interface ConfiguracaoTrabalho {
+  diasTrabalhados: number;
+  horasPorDia: number;
+}
+
 const CustosFixos = () => {
   const { toast } = useToast();
   const [custos, setCustos] = useState<CustoFixo[]>([]);
   const [novoItem, setNovoItem] = useState({ nome: '', valor: '' });
+  const [configuracao, setConfiguracao] = useState<ConfiguracaoTrabalho>({
+    diasTrabalhados: 22,
+    horasPorDia: 8
+  });
+  const [editandoConfig, setEditandoConfig] = useState(false);
 
   const custosPredefinidos = [
     { id: 'agua', nome: 'Água', valor: 0 },
-    { id: 'energia', nome: 'Energia Elétrica', valor: 0 },
-    { id: 'gas', nome: 'Gás', valor: 0 },
+    { id: 'energia', nome: 'Energia', valor: 0 },
     { id: 'internet', nome: 'Internet', valor: 0 },
+    { id: 'telefone', nome: 'Telefone', valor: 0 },
     { id: 'aluguel', nome: 'Aluguel', valor: 0 },
-    { id: 'telefone', nome: 'Telefone', valor: 0 }
+    { id: 'transporte', nome: 'Transporte', valor: 0 },
+    { id: 'iptu', nome: 'IPTU', valor: 0 },
+    { id: 'impostos', nome: 'Impostos', valor: 0 },
+    { id: 'pro-labore', nome: 'Pró-Labore', valor: 0 },
+    { id: 'manutencao', nome: 'Manutenção', valor: 0 }
   ];
 
   useEffect(() => {
     const savedCustos = localStorage.getItem('cabpro-custos-fixos');
+    const savedConfig = localStorage.getItem('cabpro-config-trabalho');
+    
     if (savedCustos) {
       setCustos(JSON.parse(savedCustos));
     } else {
       const custosIniciais = custosPredefinidos.map(c => ({ ...c, isPredefinido: true }));
       setCustos(custosIniciais);
     }
+    
+    if (savedConfig) {
+      setConfiguracao(JSON.parse(savedConfig));
+    }
   }, []);
 
   const saveCustos = (newCustos: CustoFixo[]) => {
     localStorage.setItem('cabpro-custos-fixos', JSON.stringify(newCustos));
     setCustos(newCustos);
+  };
+
+  const saveConfiguracao = (newConfig: ConfiguracaoTrabalho) => {
+    localStorage.setItem('cabpro-config-trabalho', JSON.stringify(newConfig));
+    setConfiguracao(newConfig);
   };
 
   const atualizarValor = (id: string, valor: number) => {
@@ -85,9 +111,18 @@ const CustosFixos = () => {
     });
   };
 
+  const atualizarConfiguracao = () => {
+    saveConfiguracao(configuracao);
+    setEditandoConfig(false);
+    toast({
+      title: "Sucesso",
+      description: "Configuração atualizada com sucesso!"
+    });
+  };
+
   const totalCustos = custos.reduce((acc, c) => acc + c.valor, 0);
-  const valorHora = totalCustos / 22 / 8; // 22 dias úteis, 8 horas/dia
-  const valorDia = totalCustos / 22;
+  const valorHora = totalCustos / configuracao.diasTrabalhados / configuracao.horasPorDia;
+  const valorDia = totalCustos / configuracao.diasTrabalhados;
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -98,15 +133,6 @@ const CustosFixos = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold mb-2" style={{ color: '#31144A' }}>
-          Custos Fixos
-        </h2>
-        <p className="text-gray-600">
-          Gerencie seus custos fixos mensais e calcule o valor/hora
-        </p>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="border-l-4" style={{ borderLeftColor: '#D2B360' }}>
           <CardContent className="p-4">
@@ -119,9 +145,21 @@ const CustosFixos = () => {
 
         <Card className="border-l-4" style={{ borderLeftColor: '#7B539D' }}>
           <CardContent className="p-4">
-            <div className="text-sm font-medium text-gray-600">Valor/Dia</div>
-            <div className="text-2xl font-bold" style={{ color: '#7B539D' }}>
-              {formatCurrency(valorDia)}
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-sm font-medium text-gray-600">Valor/Dia</div>
+                <div className="text-2xl font-bold" style={{ color: '#7B539D' }}>
+                  {formatCurrency(valorDia)}
+                </div>
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setEditandoConfig(true)}
+                style={{ borderColor: '#7B539D', color: '#7B539D' }}
+              >
+                <Edit className="w-3 h-3" />
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -132,9 +170,57 @@ const CustosFixos = () => {
             <div className="text-2xl font-bold" style={{ color: '#522A71' }}>
               {formatCurrency(valorHora)}
             </div>
+            <div className="text-xs text-gray-500">
+              {configuracao.diasTrabalhados}d × {configuracao.horasPorDia}h
+            </div>
           </CardContent>
         </Card>
       </div>
+
+      {editandoConfig && (
+        <Card>
+          <CardHeader style={{ backgroundColor: '#F2F2F2' }}>
+            <CardTitle style={{ color: '#31144A' }}>Configurar Dias e Horas</CardTitle>
+            <CardDescription>Ajuste a quantidade de dias e horas trabalhadas</CardDescription>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="dias">Dias Trabalhados por Mês</Label>
+                <Input
+                  id="dias"
+                  type="number"
+                  value={configuracao.diasTrabalhados}
+                  onChange={(e) => setConfiguracao({ ...configuracao, diasTrabalhados: Number(e.target.value) })}
+                />
+              </div>
+              <div>
+                <Label htmlFor="horas">Horas por Dia</Label>
+                <Input
+                  id="horas"
+                  type="number"
+                  value={configuracao.horasPorDia}
+                  onChange={(e) => setConfiguracao({ ...configuracao, horasPorDia: Number(e.target.value) })}
+                />
+              </div>
+            </div>
+            <div className="flex gap-2 mt-4">
+              <Button 
+                onClick={atualizarConfiguracao}
+                style={{ backgroundColor: '#7B539D', color: 'white' }}
+              >
+                Salvar
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => setEditandoConfig(false)}
+              >
+                Cancelar
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>

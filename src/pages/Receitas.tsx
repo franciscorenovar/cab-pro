@@ -26,15 +26,6 @@ const Receitas = () => {
 
   return (
     <MainLayout>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2" style={{ color: '#31144A' }}>
-          Módulo Receitas
-        </h1>
-        <p className="text-gray-600">
-          Gerencie sua assinatura e programa de indicações
-        </p>
-      </div>
-
       <div className="flex flex-wrap gap-2 mb-6">
         {tabs.map((tab) => (
           <Button

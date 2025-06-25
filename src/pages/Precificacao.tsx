@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Produtos from "./precificacao/Produtos";
 import CustosFixos from "./precificacao/CustosFixos";
 import Servicos from "./precificacao/Servicos";
@@ -35,15 +34,6 @@ const Precificacao = () => {
 
   return (
     <MainLayout>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2" style={{ color: '#31144A' }}>
-          Módulo de Precificação
-        </h1>
-        <p className="text-gray-600">
-          Calcule preços justos para seus produtos e serviços
-        </p>
-      </div>
-
       <div className="flex flex-wrap gap-2 mb-6">
         {tabs.map((tab) => (
           <Button
