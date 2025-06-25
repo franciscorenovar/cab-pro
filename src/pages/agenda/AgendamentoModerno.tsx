@@ -2,12 +2,11 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format, addDays, startOfMonth, endOfMonth, eachWeekOfInterval, eachDayOfInterval, startOfWeek, endOfWeek } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import GradeHorarios from "./components/GradeHorarios";
-import FormularioReserva from "./components/FormularioReserva";
 import PainelProfissional from "./components/PainelProfissional";
 
 export type StatusSlot = 'bloqueado' | 'livre' | 'reservado';
@@ -36,16 +35,37 @@ export interface Reserva {
 }
 
 const AgendamentoModerno = () => {
-  const [modoVisualizacao, setModoVisualizacao] = useState<'cliente' | 'profissional'>('cliente');
-  const [slotSelecionado, setSlotSelecionado] = useState<Slot | null>(null);
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [anoSelecionado, setAnoSelecionado] = useState<string>('2025');
+  const [mesSelecionado, setMesSelecionado] = useState<string>('1');
+  const [linkPersonalizado] = useState('https://seuapp.com/maria'); // Mock - será gerado dinamicamente
   
   // Mock data - será substituído pela integração com Firebase
   const [slots, setSlots] = useState<Slot[]>([]);
   const [reservas, setReservas] = useState<Reserva[]>([]);
 
-  const hoje = new Date();
-  const proximosMeses = Array.from({ length: 6 }, (_, i) => addDays(startOfMonth(hoje), i * 30));
+  const anos = ['2024', '2025', '2026'];
+  const meses = [
+    { valor: '1', nome: 'Janeiro' },
+    { valor: '2', nome: 'Fevereiro' },
+    { valor: '3', nome: 'Março' },
+    { valor: '4', nome: 'Abril' },
+    { valor: '5', nome: 'Maio' },
+    { valor: '6', nome: 'Junho' },
+    { valor: '7', nome: 'Julho' },
+    { valor: '8', nome: 'Agosto' },
+    { valor: '9', nome: 'Setembro' },
+    { valor: '10', nome: 'Outubro' },
+    { valor: '11', nome: 'Novembro' },
+    { valor: '12', nome: 'Dezembro' }
+  ];
+
+  const mesAtual = new Date(parseInt(anoSelecionado), parseInt(mesSelecionado) - 1, 1);
+  const inicioMes = startOfMonth(mesAtual);
+  const fimMes = endOfMonth(mesAtual);
+  const semanas = eachWeekOfInterval(
+    { start: inicioMes, end: fimMes },
+    { weekStartsOn: 1 }
+  );
 
   const gerarSlotsParaSemana = (inicioSemana: Date, fimSemana: Date) => {
     const dias = eachDayOfInterval({ start: inicioSemana, end: fimSemana });
@@ -65,48 +85,12 @@ const AgendamentoModerno = () => {
           id: `${format(dia, 'yyyy-MM-dd')}_${hora}`,
           data: dia,
           hora,
-          status: Math.random() > 0.7 ? 'bloqueado' : Math.random() > 0.5 ? 'reservado' : 'livre'
+          status: 'bloqueado' // Por padrão, tudo bloqueado até a cabeleireira liberar
         });
       });
     });
     
     return slotsGerados;
-  };
-
-  const handleReservarSlot = (slot: Slot) => {
-    if (slot.status === 'livre') {
-      setSlotSelecionado(slot);
-      setMostrarFormulario(true);
-    }
-  };
-
-  const handleConfirmarReserva = (dadosCliente: any) => {
-    if (slotSelecionado) {
-      // Aqui será feita a integração com Firebase
-      const novaReserva: Reserva = {
-        id: Date.now().toString(),
-        slotId: slotSelecionado.id,
-        clienteNome: dadosCliente.nome,
-        clienteTelefone: dadosCliente.telefone,
-        clienteEmail: dadosCliente.email,
-        tipoServico: dadosCliente.servico,
-        data: slotSelecionado.data,
-        hora: slotSelecionado.hora,
-        status: 'confirmado'
-      };
-      
-      setReservas([...reservas, novaReserva]);
-      
-      // Atualizar status do slot
-      setSlots(slots.map(s => 
-        s.id === slotSelecionado.id 
-          ? { ...s, status: 'reservado' as StatusSlot, ...dadosCliente }
-          : s
-      ));
-      
-      setMostrarFormulario(false);
-      setSlotSelecionado(null);
-    }
   };
 
   const alterarStatusSlot = (slotId: string, novoStatus: StatusSlot) => {
@@ -115,125 +99,123 @@ const AgendamentoModerno = () => {
     ));
   };
 
-  if (mostrarFormulario && slotSelecionado) {
-    return (
-      <FormularioReserva 
-        slot={slotSelecionado}
-        onConfirmar={handleConfirmarReserva}
-        onCancelar={() => {
-          setMostrarFormulario(false);
-          setSlotSelecionado(null);
-        }}
-      />
-    );
-  }
+  const copiarLink = () => {
+    navigator.clipboard.writeText(linkPersonalizado);
+    alert('Link copiado para a área de transferência!');
+  };
 
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader style={{ backgroundColor: '#F2F2F2' }}>
-          <div className="flex justify-between items-center">
-            <CardTitle style={{ color: '#31144A' }}>
-              Sistema de Agendamento
-            </CardTitle>
-            <div className="flex gap-2">
+          <CardTitle style={{ color: '#31144A' }}>
+            Gerenciar Datas Disponíveis
+          </CardTitle>
+          <p className="text-gray-600">
+            Configure os horários que estarão disponíveis para seus clientes
+          </p>
+        </CardHeader>
+        <CardContent className="p-6">
+          {/* Link personalizado */}
+          <div className="mb-6 p-4 bg-blue-50 rounded-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-medium text-gray-800">Seu Link de Agendamento</h3>
+                <p className="text-sm text-gray-600 break-all">{linkPersonalizado}</p>
+              </div>
               <Button
+                onClick={copiarLink}
+                style={{ backgroundColor: '#7B539D', color: 'white' }}
                 size="sm"
-                variant={modoVisualizacao === 'cliente' ? 'default' : 'outline'}
-                onClick={() => setModoVisualizacao('cliente')}
-                style={{
-                  backgroundColor: modoVisualizacao === 'cliente' ? '#7B539D' : 'transparent',
-                  borderColor: '#7B539D',
-                  color: modoVisualizacao === 'cliente' ? 'white' : '#7B539D'
-                }}
               >
-                Visão Cliente
-              </Button>
-              <Button
-                size="sm"
-                variant={modoVisualizacao === 'profissional' ? 'default' : 'outline'}
-                onClick={() => setModoVisualizacao('profissional')}
-                style={{
-                  backgroundColor: modoVisualizacao === 'profissional' ? '#7B539D' : 'transparent',
-                  borderColor: '#7B539D',
-                  color: modoVisualizacao === 'profissional' ? 'white' : '#7B539D'
-                }}
-              >
-                Painel Profissional
+                Copiar Link
               </Button>
             </div>
           </div>
-        </CardHeader>
-        <CardContent className="p-6">
-          {modoVisualizacao === 'profissional' ? (
-            <PainelProfissional 
-              slots={slots}
-              reservas={reservas}
-              onAlterarStatusSlot={alterarStatusSlot}
-            />
-          ) : (
-            <div className="space-y-4">
-              <div className="flex gap-4 mb-6">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded" style={{ backgroundColor: '#FFB8BA' }}></div>
-                  <span className="text-sm">Bloqueado</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded" style={{ backgroundColor: '#B8D4FF' }}></div>
-                  <span className="text-sm">Disponível</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded" style={{ backgroundColor: '#B8FFB8' }}></div>
-                  <span className="text-sm">Reservado</span>
-                </div>
-              </div>
 
-              <Accordion type="single" collapsible className="w-full">
-                {proximosMeses.map((mes, indexMes) => {
-                  const inicioMes = startOfMonth(mes);
-                  const fimMes = endOfMonth(mes);
-                  const semanas = eachWeekOfInterval(
-                    { start: inicioMes, end: fimMes },
-                    { weekStartsOn: 1 }
-                  );
-
-                  return (
-                    <AccordionItem key={indexMes} value={`mes-${indexMes}`}>
-                      <AccordionTrigger className="text-lg font-semibold" style={{ color: '#31144A' }}>
-                        {format(mes, 'MMMM yyyy', { locale: ptBR })}
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <Accordion type="single" collapsible className="pl-4">
-                          {semanas.map((semana, indexSemana) => {
-                            const inicioSemana = startOfWeek(semana, { weekStartsOn: 1 });
-                            const fimSemana = endOfWeek(semana, { weekStartsOn: 1 });
-                            const slotsParaSemana = gerarSlotsParaSemana(inicioSemana, fimSemana);
-
-                            return (
-                              <AccordionItem key={indexSemana} value={`semana-${indexMes}-${indexSemana}`}>
-                                <AccordionTrigger className="text-base">
-                                  Semana {format(inicioSemana, 'dd')} - {format(fimSemana, 'dd')}
-                                </AccordionTrigger>
-                                <AccordionContent>
-                                  <GradeHorarios 
-                                    slots={slotsParaSemana}
-                                    onSelecionarSlot={handleReservarSlot}
-                                    modoVisualizacao="cliente"
-                                  />
-                                </AccordionContent>
-                              </AccordionItem>
-                            );
-                          })}
-                        </Accordion>
-                      </AccordionContent>
-                    </AccordionItem>
-                  );
-                })}
-              </Accordion>
+          {/* Seletores de Ano e Mês */}
+          <div className="flex gap-4 mb-6">
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Ano</label>
+              <Select value={anoSelecionado} onValueChange={setAnoSelecionado}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {anos.map((ano) => (
+                    <SelectItem key={ano} value={ano}>
+                      {ano}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-          )}
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Mês</label>
+              <Select value={mesSelecionado} onValueChange={setMesSelecionado}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {meses.map((mes) => (
+                    <SelectItem key={mes.valor} value={mes.valor}>
+                      {mes.nome}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Legenda */}
+          <div className="flex gap-4 mb-6">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded" style={{ backgroundColor: '#FFB8BA' }}></div>
+              <span className="text-sm">Bloqueado</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded" style={{ backgroundColor: '#B8D4FF' }}></div>
+              <span className="text-sm">Disponível</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded" style={{ backgroundColor: '#B8FFB8' }}></div>
+              <span className="text-sm">Reservado</span>
+            </div>
+          </div>
+
+          {/* Accordion das Semanas */}
+          <Accordion type="single" collapsible className="w-full">
+            {semanas.map((semana, indexSemana) => {
+              const inicioSemana = startOfWeek(semana, { weekStartsOn: 1 });
+              const fimSemana = endOfWeek(semana, { weekStartsOn: 1 });
+              const slotsParaSemana = gerarSlotsParaSemana(inicioSemana, fimSemana);
+
+              return (
+                <AccordionItem key={indexSemana} value={`semana-${indexSemana}`}>
+                  <AccordionTrigger className="text-base">
+                    Semana {format(inicioSemana, 'dd')} - {format(fimSemana, 'dd')} de {format(mesAtual, 'MMMM', { locale: ptBR })}
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <GradeHorarios 
+                      slots={slotsParaSemana}
+                      onSelecionarSlot={() => {}}
+                      modoVisualizacao="profissional"
+                      onAlterarStatusSlot={alterarStatusSlot}
+                    />
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            })}
+          </Accordion>
         </CardContent>
       </Card>
+
+      {/* Painel de Reservas */}
+      <PainelProfissional 
+        slots={slots}
+        reservas={reservas}
+        onAlterarStatusSlot={alterarStatusSlot}
+      />
     </div>
   );
 };

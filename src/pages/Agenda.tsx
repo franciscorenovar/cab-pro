@@ -9,7 +9,7 @@ const Agenda = () => {
   const [activeTab, setActiveTab] = useState("agendamentos");
 
   const tabs = [
-    { id: "agendamentos", name: "Agendamentos" },
+    { id: "agendamentos", name: "Datas Disponíveis" },
     { id: "clientes", name: "Clientes" }
   ];
 
