@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
-import Agendamentos from "./agenda/Agendamentos";
-import Clientes from "./agenda/Clientes";
+import AgendamentoModerno from "./agenda/AgendamentoModerno";
+import ClientesSimples from "./agenda/ClientesSimples";
 
 const Agenda = () => {
   const [activeTab, setActiveTab] = useState("agendamentos");
@@ -16,11 +16,11 @@ const Agenda = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "agendamentos":
-        return <Agendamentos />;
+        return <AgendamentoModerno />;
       case "clientes":
-        return <Clientes />;
+        return <ClientesSimples />;
       default:
-        return <Agendamentos />;
+        return <AgendamentoModerno />;
     }
   };
 
