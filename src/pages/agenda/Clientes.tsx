@@ -172,15 +172,6 @@ const Clientes = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold mb-2" style={{ color: '#31144A' }}>
-          Clientes
-        </h2>
-        <p className="text-gray-600">
-          Gerencie o cadastro dos seus clientes
-        </p>
-      </div>
-
       <Card>
         <CardHeader style={{ backgroundColor: '#F2F2F2' }}>
           <CardTitle style={{ color: '#31144A' }}>

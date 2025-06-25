@@ -118,16 +118,35 @@ export const FormularioLancamento = ({
             </div>
 
             <div>
-              <Label htmlFor="tipo">Tipo *</Label>
-              <Select value={formData.tipo} onValueChange={(value: 'Entrada' | 'Saída') => setFormData({ ...formData, tipo: value })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione o tipo" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Entrada">Entrada</SelectItem>
-                  <SelectItem value="Saída">Saída</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label>Tipo *</Label>
+              <div className="flex gap-2 mt-1">
+                <Button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, tipo: 'Entrada' })}
+                  style={{
+                    backgroundColor: formData.tipo === 'Entrada' ? '#7B539D' : 'transparent',
+                    borderColor: '#7B539D',
+                    color: formData.tipo === 'Entrada' ? 'white' : '#7B539D'
+                  }}
+                  variant={formData.tipo === 'Entrada' ? 'default' : 'outline'}
+                  className="flex-1 hover:opacity-90"
+                >
+                  Entrada
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, tipo: 'Saída' })}
+                  style={{
+                    backgroundColor: formData.tipo === 'Saída' ? '#7B539D' : 'transparent',
+                    borderColor: '#7B539D',
+                    color: formData.tipo === 'Saída' ? 'white' : '#7B539D'
+                  }}
+                  variant={formData.tipo === 'Saída' ? 'default' : 'outline'}
+                  className="flex-1 hover:opacity-90"
+                >
+                  Saída
+                </Button>
+              </div>
             </div>
 
             <div>
@@ -160,16 +179,35 @@ export const FormularioLancamento = ({
             </div>
 
             <div>
-              <Label htmlFor="categoria">Categoria *</Label>
-              <Select value={formData.categoria} onValueChange={(value: 'Profissional' | 'Pessoal') => setFormData({ ...formData, categoria: value })}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione a categoria" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Profissional">Profissional</SelectItem>
-                  <SelectItem value="Pessoal">Pessoal</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label>Categoria *</Label>
+              <div className="flex gap-2 mt-1">
+                <Button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, categoria: 'Profissional' })}
+                  style={{
+                    backgroundColor: formData.categoria === 'Profissional' ? '#7B539D' : 'transparent',
+                    borderColor: '#7B539D',
+                    color: formData.categoria === 'Profissional' ? 'white' : '#7B539D'
+                  }}
+                  variant={formData.categoria === 'Profissional' ? 'default' : 'outline'}
+                  className="flex-1 hover:opacity-90"
+                >
+                  Profissional
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, categoria: 'Pessoal' })}
+                  style={{
+                    backgroundColor: formData.categoria === 'Pessoal' ? '#7B539D' : 'transparent',
+                    borderColor: '#7B539D',
+                    color: formData.categoria === 'Pessoal' ? 'white' : '#7B539D'
+                  }}
+                  variant={formData.categoria === 'Pessoal' ? 'default' : 'outline'}
+                  className="flex-1 hover:opacity-90"
+                >
+                  Pessoal
+                </Button>
+              </div>
             </div>
           </div>
 
