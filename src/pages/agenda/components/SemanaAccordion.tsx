@@ -47,8 +47,8 @@ const SemanaAccordion = ({
   return (
     <Accordion type="single" collapsible className="w-full">
       {semanas.map((semana, indexSemana) => {
-        const inicioSemana = startOfWeek(semana, { weekStartsOn: 0 }); // Começa no domingo
-        const fimSemana = endOfWeek(semana, { weekStartsOn: 0 }); // Termina no sábado
+        const inicioSemana = startOfWeek(semana, { locale: ptBR }); // Começa no domingo
+        const fimSemana = endOfWeek(semana, { locale: ptBR }); // Termina no sábado
         const slotsParaSemana = gerarSlotsParaSemana(inicioSemana, fimSemana);
 
         return (
