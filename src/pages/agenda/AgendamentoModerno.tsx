@@ -29,7 +29,7 @@ const AgendamentoModerno = () => {
   const fimMes = endOfMonth(mesAtual);
   const semanas = eachWeekOfInterval(
     { start: inicioMes, end: fimMes },
-    { weekStartsOn: 1 }
+    { weekStartsOn: 0 }
   );
 
   const alterarStatusSlot = (slotId: string, novoStatus: StatusSlot) => {
@@ -72,7 +72,7 @@ const AgendamentoModerno = () => {
       <Card>
         <CardHeader style={{ backgroundColor: '#F2F2F2' }}>
           <CardTitle style={{ color: '#31144A' }}>
-            Gerenciar Datas Disponíveis
+            Datas Disponíveis
           </CardTitle>
           <p className="text-gray-600">
             Configure os horários que estarão disponíveis para seus clientes

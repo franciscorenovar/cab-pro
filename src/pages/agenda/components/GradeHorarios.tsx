@@ -22,7 +22,13 @@ const GradeHorarios = ({
   onAdicionarHorario,
   horariosDisponiveis 
 }: GradeHorariosProps) => {
-  const diasUnicos = [...new Set(slots.map(slot => format(slot.data, 'yyyy-MM-dd')))];
+  // Pegar dias únicos e ordenar corretamente (DOM, SEG, TER, QUA, QUI, SEX, SAB)
+  const diasUnicos = [...new Set(slots.map(slot => format(slot.data, 'yyyy-MM-dd')))]
+    .sort((a, b) => {
+      const dataA = new Date(a);
+      const dataB = new Date(b);
+      return dataA.getTime() - dataB.getTime();
+    });
   
   const diasAbreviados = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
 
@@ -46,11 +52,14 @@ const GradeHorarios = ({
   };
 
   const handleClickSlot = (slot: Slot) => {
+    console.log('Clicou no slot:', slot.id, 'Status atual:', slot.status);
+    
     if (modoVisualizacao === 'cliente' && slot.status === 'livre') {
       onSelecionarSlot(slot);
     } else if (modoVisualizacao === 'profissional' && onAlterarStatusSlot) {
       if (slot.status !== 'reservado') {
         const proximoStatus = slot.status === 'bloqueado' ? 'livre' : 'bloqueado';
+        console.log('Mudando status para:', proximoStatus);
         onAlterarStatusSlot(slot.id, proximoStatus);
       }
     }

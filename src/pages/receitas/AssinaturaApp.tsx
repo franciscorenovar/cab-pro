@@ -140,15 +140,6 @@ const AssinaturaApp = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold mb-2" style={{ color: '#31144A' }}>
-          Assinatura do App
-        </h2>
-        <p className="text-gray-600">
-          Gerencie sua assinatura e método de pagamento
-        </p>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="border-l-4" style={{ borderLeftColor: getStatusColor(assinatura.status) }}>
           <CardContent className="p-4">
@@ -318,75 +309,6 @@ const AssinaturaApp = () => {
           </CardContent>
         </Card>
       </div>
-
-      <Card>
-        <CardHeader style={{ backgroundColor: '#F2F2F2' }}>
-          <CardTitle style={{ color: '#31144A' }}>Planos Disponíveis</CardTitle>
-          <CardDescription>Compare os recursos dos nossos planos</CardDescription>
-        </CardHeader>
-        <CardContent className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className={`border-2 ${assinatura.plano === 'basico' ? 'border-purple-500' : 'border-gray-200'}`}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle style={{ color: '#7B539D' }}>Plano Básico</CardTitle>
-                  {assinatura.plano === 'basico' && (
-                    <Badge style={{ backgroundColor: '#7B539D', color: 'white' }}>
-                      Atual
-                    </Badge>
-                  )}
-                </div>
-                <div className="text-2xl font-bold" style={{ color: '#D2B360' }}>
-                  R$ 15/mês
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm">
-                  <li>✓ Módulo de Precificação</li>
-                  <li>✓ Módulo Financeiro</li>
-                  <li>✓ Agenda Básica</li>
-                  <li>✓ Cadastro de Clientes</li>
-                  <li>✓ Relatórios Simples</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className={`border-2 ${assinatura.plano === 'premium' ? 'border-purple-500' : 'border-gray-200'}`}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle style={{ color: '#522A71' }}>Plano Premium</CardTitle>
-                  {assinatura.plano === 'premium' && (
-                    <Badge style={{ backgroundColor: '#522A71', color: 'white' }}>
-                      Atual
-                    </Badge>
-                  )}
-                </div>
-                <div className="text-2xl font-bold" style={{ color: '#D2B360' }}>
-                  R$ 29/mês
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm">
-                  <li>✓ Todos os recursos do Básico</li>
-                  <li>✓ Agenda Avançada com Notificações</li>
-                  <li>✓ Relatórios Avançados</li>
-                  <li>✓ Backup na Nuvem</li>
-                  <li>✓ Suporte Prioritário</li>
-                  <li>✓ Exportação Ilimitada</li>
-                </ul>
-                {assinatura.plano === 'basico' && (
-                  <Button 
-                    style={{ backgroundColor: '#522A71', color: 'white' }}
-                    className="w-full mt-4 hover:opacity-90"
-                  >
-                    Fazer Upgrade
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        </CardContent>
-      </Card>
 
       <Card className="border-red-200 bg-red-50">
         <CardHeader>

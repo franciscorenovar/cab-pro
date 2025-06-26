@@ -27,10 +27,7 @@ const SemanaAccordion = ({
     
     const slotsGerados: Slot[] = [];
     dias.forEach(dia => {
-      // Incluir todos os dias da semana, incluindo sábado
-      // Pular apenas domingos (dia 0)
-      if (dia.getDay() === 0) return;
-      
+      // Incluir todos os dias da semana na ordem: DOM, SEG, TER, QUA, QUI, SEX, SAB
       horariosDisponiveis.forEach(hora => {
         const slotId = `${format(dia, 'yyyy-MM-dd')}_${hora}`;
         // Verificar se o slot já existe
@@ -51,8 +48,8 @@ const SemanaAccordion = ({
   return (
     <Accordion type="single" collapsible className="w-full">
       {semanas.map((semana, indexSemana) => {
-        const inicioSemana = startOfWeek(semana, { weekStartsOn: 1 });
-        const fimSemana = endOfWeek(semana, { weekStartsOn: 1 });
+        const inicioSemana = startOfWeek(semana, { weekStartsOn: 0 }); // Começa no domingo
+        const fimSemana = endOfWeek(semana, { weekStartsOn: 0 }); // Termina no sábado
         const slotsParaSemana = gerarSlotsParaSemana(inicioSemana, fimSemana);
 
         return (
