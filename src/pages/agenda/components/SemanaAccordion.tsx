@@ -27,7 +27,6 @@ const SemanaAccordion = ({
     
     const slotsGerados: Slot[] = [];
     dias.forEach(dia => {
-      // Incluir todos os dias da semana na ordem: DOM, SEG, TER, QUA, QUI, SEX, SAB
       horariosDisponiveis.forEach(hora => {
         const slotId = `${format(dia, 'yyyy-MM-dd')}_${hora}`;
         // Verificar se o slot já existe

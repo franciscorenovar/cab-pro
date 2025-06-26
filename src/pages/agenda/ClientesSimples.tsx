@@ -1,133 +1,106 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-
-interface Cliente {
-  id: string;
-  nome: string;
-  telefone: string;
-  email?: string;
-  ultimoServico?: string;
-  ultimaVisita?: Date;
-  totalVisitas: number;
-}
+import { User, Phone, Mail, Calendar } from "lucide-react";
 
 const ClientesSimples = () => {
-  // Mock data - será substituído pela integração
-  const [clientes] = useState<Cliente[]>([
+  // Mock data - será substituído pela integração com Firebase
+  const clientes = [
     {
-      id: '1',
-      nome: 'Maria Silva',
-      telefone: '(11) 99999-9999',
-      email: 'maria@email.com',
-      ultimoServico: 'Corte + Escova',
-      ultimaVisita: new Date('2024-12-20'),
-      totalVisitas: 5
+      id: 1,
+      nome: "Ana Silva",
+      telefone: "(11) 99999-9999",
+      email: "ana@email.com",
+      ultimoAgendamento: "15/12/2024",
+      totalAgendamentos: 5,
+      status: "ativo"
     },
     {
-      id: '2',
-      nome: 'Ana Costa',
-      telefone: '(11) 88888-8888',
-      ultimoServico: 'Hidratação',
-      ultimaVisita: new Date('2024-12-18'),
-      totalVisitas: 3
+      id: 2,
+      nome: "Carla Santos",
+      telefone: "(11) 88888-8888",
+      email: "carla@email.com",
+      ultimoAgendamento: "20/12/2024",
+      totalAgendamentos: 3,
+      status: "ativo"
     }
-  ]);
-
-  const [termoBusca, setTermoBusca] = useState('');
-
-  const clientesFiltrados = clientes.filter(cliente =>
-    cliente.nome.toLowerCase().includes(termoBusca.toLowerCase()) ||
-    cliente.telefone.includes(termoBusca)
-  );
-
-  const exportarClientes = () => {
-    // Aqui será implementada a exportação para campanhas de marketing
-    const dadosExportacao = clientes.map(cliente => ({
-      nome: cliente.nome,
-      telefone: cliente.telefone,
-      email: cliente.email,
-      ultimaVisita: cliente.ultimaVisita ? format(cliente.ultimaVisita, 'dd/MM/yyyy') : '',
-      totalVisitas: cliente.totalVisitas
-    }));
-    
-    console.log('Dados para exportação:', dadosExportacao);
-    // Implementar download CSV ou integração com plataformas de marketing
-  };
+  ];
 
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader style={{ backgroundColor: '#F2F2F2' }}>
-          <div className="flex justify-between items-center">
-            <CardTitle style={{ color: '#31144A' }}>
-              Base de Clientes ({clientes.length})
-            </CardTitle>
-            <Button
-              onClick={exportarClientes}
-              style={{ backgroundColor: '#7B539D', color: 'white' }}
-              size="sm"
-            >
-              Exportar para Marketing
-            </Button>
-          </div>
+          <CardTitle style={{ color: '#31144A' }}>
+            Clientes
+          </CardTitle>
+          <p className="text-gray-600">
+            Gerencie seus clientes e visualize o histórico de agendamentos
+          </p>
         </CardHeader>
         <CardContent className="p-6">
           <div className="space-y-4">
-            <Input
-              placeholder="Buscar por nome ou telefone..."
-              value={termoBusca}
-              onChange={(e) => setTermoBusca(e.target.value)}
-              className="max-w-md"
-            />
-
-            <div className="grid gap-4">
-              {clientesFiltrados.length === 0 ? (
-                <div className="text-center text-gray-500 py-8">
-                  {termoBusca ? 'Nenhum cliente encontrado.' : 'Nenhum cliente cadastrado ainda.'}
+            {clientes.map((cliente) => (
+              <div key={cliente.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div className="flex justify-between items-start mb-3">
+                  <div className="flex items-center gap-2">
+                    <User size={20} style={{ color: '#7B539D' }} />
+                    <h3 className="font-semibold text-lg">{cliente.nome}</h3>
+                  </div>
+                  <Badge 
+                    style={{ 
+                      backgroundColor: cliente.status === 'ativo' ? '#B8FFB8' : '#FFB8BA',
+                      color: '#333'
+                    }}
+                  >
+                    {cliente.status}
+                  </Badge>
                 </div>
-              ) : (
-                clientesFiltrados.map((cliente) => (
-                  <Card key={cliente.id} className="border">
-                    <CardContent className="p-4">
-                      <div className="flex justify-between items-start">
-                        <div className="space-y-1">
-                          <h4 className="font-semibold text-lg" style={{ color: '#31144A' }}>
-                            {cliente.nome}
-                          </h4>
-                          <p className="text-gray-600">{cliente.telefone}</p>
-                          {cliente.email && (
-                            <p className="text-gray-600 text-sm">{cliente.email}</p>
-                          )}
-                        </div>
-                        <div className="text-right text-sm">
-                          <div className="font-medium text-gray-700">
-                            {cliente.totalVisitas} visita{cliente.totalVisitas !== 1 ? 's' : ''}
-                          </div>
-                          {cliente.ultimaVisita && (
-                            <div className="text-gray-500">
-                              Última: {format(cliente.ultimaVisita, 'dd/MM/yyyy', { locale: ptBR })}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      {cliente.ultimoServico && (
-                        <div className="mt-3 pt-3 border-t">
-                          <div className="text-sm">
-                            <span className="text-gray-500">Último serviço:</span>
-                            <span className="ml-2 font-medium">{cliente.ultimoServico}</span>
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))
-              )}
-            </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Phone size={16} />
+                    {cliente.telefone}
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Mail size={16} />
+                    {cliente.email}
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Calendar size={16} />
+                    Último agendamento: {cliente.ultimoAgendamento}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Total de agendamentos: {cliente.totalAgendamentos}
+                  </div>
+                </div>
+                
+                <div className="flex gap-2">
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    style={{ borderColor: '#7B539D', color: '#7B539D' }}
+                  >
+                    Ver Histórico
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    style={{ borderColor: '#7B539D', color: '#7B539D' }}
+                  >
+                    Editar
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-6 text-center">
+            <Button 
+              style={{ backgroundColor: '#7B539D', color: 'white' }}
+            >
+              Adicionar Novo Cliente
+            </Button>
           </div>
         </CardContent>
       </Card>

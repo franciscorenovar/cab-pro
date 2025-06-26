@@ -22,7 +22,7 @@ const GradeHorarios = ({
   onAdicionarHorario,
   horariosDisponiveis 
 }: GradeHorariosProps) => {
-  // Pegar dias únicos e ordenar corretamente (DOM, SEG, TER, QUA, QUI, SEX, SAB)
+  // Pegar dias únicos e ordenar por data
   const diasUnicos = [...new Set(slots.map(slot => format(slot.data, 'yyyy-MM-dd')))]
     .sort((a, b) => {
       const dataA = new Date(a);
