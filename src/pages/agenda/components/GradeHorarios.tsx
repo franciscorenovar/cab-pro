@@ -111,7 +111,7 @@ const GradeHorarios = ({
                       size="sm"
                       className="w-20 h-12 text-xs p-1 relative border border-gray-300 rounded-none hover:opacity-80"
                       style={{ 
-                        backgroundColor: slot.status === 'reservado' ? '#B8FFB8' : getCorSlot(slot.status),,
+                        backgroundColor: getCorSlot(slot.status),
                         borderColor: '#d1d5db',
                         cursor: (modoVisualizacao === 'cliente' && slot.status === 'livre') || 
                                (modoVisualizacao === 'profissional' && slot.status !== 'reservado') 

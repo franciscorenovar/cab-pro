@@ -32,11 +32,11 @@ const ClientesSimples = () => {
       <Card>
         <CardHeader style={{ backgroundColor: '#F2F2F2' }}>
           <CardTitle style={{ color: '#31144A' }}>
-            {/* Clientes */}
+            Clientes
           </CardTitle>
-         {/* <p className="text-gray-600">
+          <p className="text-gray-600">
             Gerencie seus clientes e visualize o histórico de agendamentos
-          </p> */}
+          </p>
         </CardHeader>
         <CardContent className="p-6">
           <div className="space-y-4">
