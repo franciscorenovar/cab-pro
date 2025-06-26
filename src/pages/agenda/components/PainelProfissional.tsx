@@ -1,11 +1,9 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Slot, Reserva } from "../AgendamentoModerno";
-import GradeHorarios from "./GradeHorarios";
 
 interface PainelProfissionalProps {
   slots: Slot[];
@@ -105,37 +103,6 @@ const PainelProfissional = ({ slots, reservas, onAlterarStatusSlot }: PainelProf
               ))}
             </div>
           )}
-        </CardContent>
-      </Card>
-
-      {/* Grade de Horários para Gerenciamento */}
-      <Card>
-        <CardHeader>
-          <CardTitle style={{ color: '#31144A' }}>Gerenciar Horários</CardTitle>
-          <div className="text-sm text-gray-600">
-            Clique nos horários para liberar/bloquear disponibilidade
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="flex gap-4 mb-4">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded" style={{ backgroundColor: '#FFB8BA' }}></div>
-              <span className="text-sm">Bloqueado</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded" style={{ backgroundColor: '#B8D4FF' }}></div>
-              <span className="text-sm">Disponível</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded" style={{ backgroundColor: '#B8FFB8' }}></div>
-              <span className="text-sm">Reservado</span>
-            </div>
-          </div>
-          
-          {/* Aqui você pode adicionar a grade de horários atual ou da próxima semana */}
-          <div className="text-center text-gray-500 py-8">
-            Grade de horários será implementada aqui para gerenciamento
-          </div>
         </CardContent>
       </Card>
     </div>
