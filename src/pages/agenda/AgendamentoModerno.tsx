@@ -72,11 +72,11 @@ const AgendamentoModerno = () => {
       <Card>
         <CardHeader style={{ backgroundColor: '#F2F2F2' }}>
           <CardTitle style={{ color: '#31144A' }}>
-            Datas Disponíveis
+           {/* Datas Disponíveis */}
           </CardTitle>
-          <p className="text-gray-600">
-            Configure os horários que estarão disponíveis para seus clientes
-          </p>
+          {/* <p className="text-gray-600">
+  Configure os horários que estarão disponíveis para seus clientes
+</p> */}
         </CardHeader>
         <CardContent className="p-6">
           <LinkPersonalizado 
