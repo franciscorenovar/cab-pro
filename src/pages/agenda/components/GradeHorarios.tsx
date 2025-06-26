@@ -10,17 +10,20 @@ interface GradeHorariosProps {
   onSelecionarSlot: (slot: Slot) => void;
   modoVisualizacao: 'cliente' | 'profissional';
   onAlterarStatusSlot?: (slotId: string, novoStatus: 'bloqueado' | 'livre' | 'reservado') => void;
+  onAdicionarHorario?: () => void;
+  horariosDisponiveis: string[];
 }
 
-const GradeHorarios = ({ slots, onSelecionarSlot, modoVisualizacao, onAlterarStatusSlot }: GradeHorariosProps) => {
+const GradeHorarios = ({ 
+  slots, 
+  onSelecionarSlot, 
+  modoVisualizacao, 
+  onAlterarStatusSlot, 
+  onAdicionarHorario,
+  horariosDisponiveis 
+}: GradeHorariosProps) => {
   const diasUnicos = [...new Set(slots.map(slot => format(slot.data, 'yyyy-MM-dd')))];
   
-  // Horários de 7:00 às 18:00 de hora em hora
-  const horariosUnicos = [
-    '07:00', '08:00', '09:00', '10:00', '11:00', '12:00',
-    '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'
-  ];
-
   const diasAbreviados = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
 
   const getCorSlot = (status: Slot['status']) => {
@@ -46,16 +49,11 @@ const GradeHorarios = ({ slots, onSelecionarSlot, modoVisualizacao, onAlterarSta
     if (modoVisualizacao === 'cliente' && slot.status === 'livre') {
       onSelecionarSlot(slot);
     } else if (modoVisualizacao === 'profissional' && onAlterarStatusSlot) {
-      const proximoStatus = slot.status === 'bloqueado' ? 'livre' : 'bloqueado';
       if (slot.status !== 'reservado') {
+        const proximoStatus = slot.status === 'bloqueado' ? 'livre' : 'bloqueado';
         onAlterarStatusSlot(slot.id, proximoStatus);
       }
     }
-  };
-
-  const adicionarMaisHorarios = () => {
-    // Função para adicionar mais horários - será implementada conforme necessário
-    console.log('Adicionar mais horários');
   };
 
   return (
@@ -82,7 +80,7 @@ const GradeHorarios = ({ slots, onSelecionarSlot, modoVisualizacao, onAlterarSta
             })}
 
             {/* Grid de horários */}
-            {horariosUnicos.map(hora => (
+            {horariosDisponiveis.map(hora => (
               <>
                 {/* Header de hora fixo à esquerda */}
                 <div key={`hora-${hora}`} className="sticky left-0 z-10 bg-gray-50 border-r p-2 text-center font-medium text-sm">
@@ -102,7 +100,7 @@ const GradeHorarios = ({ slots, onSelecionarSlot, modoVisualizacao, onAlterarSta
                       key={slot.id}
                       variant="outline"
                       size="sm"
-                      className="w-20 h-12 text-xs p-1 relative border border-gray-300 rounded-none"
+                      className="w-20 h-12 text-xs p-1 relative border border-gray-300 rounded-none hover:opacity-80"
                       style={{ 
                         backgroundColor: getCorSlot(slot.status),
                         borderColor: '#d1d5db',
@@ -128,18 +126,20 @@ const GradeHorarios = ({ slots, onSelecionarSlot, modoVisualizacao, onAlterarSta
       </div>
 
       {/* Botão de adicionar mais horários */}
-      <div className="flex justify-center mt-4">
-        <Button
-          onClick={adicionarMaisHorarios}
-          variant="outline"
-          size="sm"
-          className="flex items-center gap-2"
-          style={{ borderColor: '#7B539D', color: '#7B539D' }}
-        >
-          <Plus size={16} />
-          Adicionar mais horários
-        </Button>
-      </div>
+      {modoVisualizacao === 'profissional' && onAdicionarHorario && (
+        <div className="flex justify-center mt-4">
+          <Button
+            onClick={onAdicionarHorario}
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-2"
+            style={{ borderColor: '#7B539D', color: '#7B539D' }}
+          >
+            <Plus size={16} />
+            Adicionar mais horários
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

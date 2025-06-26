@@ -37,7 +37,13 @@ export interface Reserva {
 const AgendamentoModerno = () => {
   const [anoSelecionado, setAnoSelecionado] = useState<string>('2025');
   const [mesSelecionado, setMesSelecionado] = useState<string>('1');
-  const [linkPersonalizado] = useState('https://seuapp.com/maria'); // Mock - será gerado dinamicamente
+  const [linkPersonalizado] = useState('https://seuapp.com/maria');
+  
+  // Horários iniciais de 7:00 às 18:00
+  const [horariosDisponiveis, setHorariosDisponiveis] = useState<string[]>([
+    '07:00', '08:00', '09:00', '10:00', '11:00', '12:00',
+    '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'
+  ]);
   
   // Mock data - será substituído pela integração com Firebase
   const [slots, setSlots] = useState<Slot[]>([]);
@@ -69,20 +75,20 @@ const AgendamentoModerno = () => {
 
   const gerarSlotsParaSemana = (inicioSemana: Date, fimSemana: Date) => {
     const dias = eachDayOfInterval({ start: inicioSemana, end: fimSemana });
-    // Horários de 7:00 às 18:00 de hora em hora
-    const horarios = [
-      '07:00', '08:00', '09:00', '10:00', '11:00', '12:00',
-      '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'
-    ];
     
     const slotsGerados: Slot[] = [];
     dias.forEach(dia => {
-      // Pular domingos (dia 0)
+      // Incluir todos os dias da semana, incluindo sábado
+      // Pular apenas domingos (dia 0)
       if (dia.getDay() === 0) return;
       
-      horarios.forEach(hora => {
-        slotsGerados.push({
-          id: `${format(dia, 'yyyy-MM-dd')}_${hora}`,
+      horariosDisponiveis.forEach(hora => {
+        const slotId = `${format(dia, 'yyyy-MM-dd')}_${hora}`;
+        // Verificar se o slot já existe
+        const slotExistente = slots.find(s => s.id === slotId);
+        
+        slotsGerados.push(slotExistente || {
+          id: slotId,
           data: dia,
           hora,
           status: 'bloqueado' // Por padrão, tudo bloqueado até a cabeleireira liberar
@@ -94,9 +100,33 @@ const AgendamentoModerno = () => {
   };
 
   const alterarStatusSlot = (slotId: string, novoStatus: StatusSlot) => {
-    setSlots(slots.map(s => 
-      s.id === slotId ? { ...s, status: novoStatus } : s
-    ));
+    setSlots(slotsAtuais => {
+      const slotsExistentes = slotsAtuais.map(s => 
+        s.id === slotId ? { ...s, status: novoStatus } : s
+      );
+      
+      // Se o slot não existir, criar um novo
+      if (!slotsExistentes.find(s => s.id === slotId)) {
+        const [dataStr, hora] = slotId.split('_');
+        const novoSlot: Slot = {
+          id: slotId,
+          data: new Date(dataStr),
+          hora,
+          status: novoStatus
+        };
+        return [...slotsExistentes, novoSlot];
+      }
+      
+      return slotsExistentes;
+    });
+  };
+
+  const adicionarMaisHorarios = () => {
+    const ultimoHorario = horariosDisponiveis[horariosDisponiveis.length - 1];
+    const [horas] = ultimoHorario.split(':');
+    const proximaHora = (parseInt(horas) + 1).toString().padStart(2, '0') + ':00';
+    
+    setHorariosDisponiveis(horarios => [...horarios, proximaHora]);
   };
 
   const copiarLink = () => {
@@ -201,6 +231,8 @@ const AgendamentoModerno = () => {
                       onSelecionarSlot={() => {}}
                       modoVisualizacao="profissional"
                       onAlterarStatusSlot={alterarStatusSlot}
+                      onAdicionarHorario={adicionarMaisHorarios}
+                      horariosDisponiveis={horariosDisponiveis}
                     />
                   </AccordionContent>
                 </AccordionItem>
