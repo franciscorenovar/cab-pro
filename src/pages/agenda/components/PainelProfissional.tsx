@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Slot, Reserva } from "../AgendamentoModerno";
+import { Slot, Reserva } from "../types/agenda";
 
 interface PainelProfissionalProps {
   slots: Slot[];
