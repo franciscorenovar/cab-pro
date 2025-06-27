@@ -30,6 +30,7 @@ const GradeHorarios = ({
       return dataA.getTime() - dataB.getTime();
     });
   
+  // Corrigir ordem dos dias da semana: DOM, SEG, TER, QUA, QUI, SEX, SAB
   const diasAbreviados = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
 
   const getCorSlot = (status: Slot['status']) => {
@@ -58,6 +59,7 @@ const GradeHorarios = ({
       onSelecionarSlot(slot);
     } else if (modoVisualizacao === 'profissional' && onAlterarStatusSlot) {
       if (slot.status !== 'reservado') {
+        // Alternar entre bloqueado e livre
         const proximoStatus = slot.status === 'bloqueado' ? 'livre' : 'bloqueado';
         console.log('Mudando status para:', proximoStatus);
         onAlterarStatusSlot(slot.id, proximoStatus);
@@ -111,7 +113,7 @@ const GradeHorarios = ({
                       size="sm"
                       className="w-20 h-12 text-xs p-1 relative border border-gray-300 rounded-none hover:opacity-80"
                       style={{ 
-                        backgroundColor: slot.status === 'reservado' ? '#B8FFB8' : getCorSlot(slot.status),
+                        backgroundColor: getCorSlot(slot.status),
                         borderColor: '#d1d5db',
                         cursor: (modoVisualizacao === 'cliente' && slot.status === 'livre') || 
                                (modoVisualizacao === 'profissional' && slot.status !== 'reservado') 

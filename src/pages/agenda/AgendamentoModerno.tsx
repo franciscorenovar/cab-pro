@@ -27,12 +27,14 @@ const AgendamentoModerno = () => {
   const mesAtual = new Date(parseInt(anoSelecionado), parseInt(mesSelecionado) - 1, 1);
   const inicioMes = startOfMonth(mesAtual);
   const fimMes = endOfMonth(mesAtual);
+  // Forçar semana começar na segunda-feira
   const semanas = eachWeekOfInterval(
     { start: inicioMes, end: fimMes },
-    { weekStartsOn: 0 }
+    { weekStartsOn: 1 }
   );
 
   const alterarStatusSlot = (slotId: string, novoStatus: StatusSlot) => {
+    console.log('Alterando status do slot:', slotId, 'para:', novoStatus);
     setSlots(slotsAtuais => {
       const slotsExistentes = slotsAtuais.map(s => 
         s.id === slotId ? { ...s, status: novoStatus } : s
@@ -47,9 +49,11 @@ const AgendamentoModerno = () => {
           hora,
           status: novoStatus
         };
+        console.log('Criando novo slot:', novoSlot);
         return [...slotsExistentes, novoSlot];
       }
       
+      console.log('Slots atualizados:', slotsExistentes);
       return slotsExistentes;
     });
   };
