@@ -76,7 +76,7 @@ const GradeHorarios: React.FC<GradeHorariosProps> = ({
           }}
         >
           {horariosDisponiveis.map((hora) => (
-            <React.Fragment key={hora}>
+            <div key={hora} style={{ display: "contents" }}>
               {/* coluna fixa da hora */}
               <div className="sticky left-0 bg-white border-r flex items-center justify-center">
                 {hora}
@@ -100,7 +100,7 @@ const GradeHorarios: React.FC<GradeHorariosProps> = ({
                   />
                 );
               })}
-            </React.Fragment>
+            </div>
           ))}
         </div>
       </div>

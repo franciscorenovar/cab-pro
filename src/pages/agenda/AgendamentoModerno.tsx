@@ -53,6 +53,11 @@ const AgendamentoModerno: React.FC = () => {
     setHorariosDisponiveis((h) => [...h, nova]);
   };
 
+  const copiarLink = () => {
+  navigator.clipboard.writeText(linkPersonalizado);
+  alert("Link copiado!");
+};
+
   return (
     <div className="space-y-4">
       <Card>
@@ -63,10 +68,13 @@ const AgendamentoModerno: React.FC = () => {
           <ConfiguracaoMesAno
             anoSelecionado={anoSelecionado}
             mesSelecionado={mesSelecionado}
-            onAlterarAno={setAnoSelecionado}
-            onAlterarMes={setMesSelecionado}
+            onAnoChange={setAnoSelecionado}
+            onMesChange={setMesSelecionado}
           />
-          <LinkPersonalizado link={linkPersonalizado} />
+          <LinkPersonalizado 
+          linkPersonalizado={linkPersonalizado}
+          onCopiarLink={copiarLink}
+          />
           <LegendaCores />
         </CardContent>
       </Card>
