@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Slot } from "../types/agenda";
+import { Slot } from "../types/Agenda";
 
 interface FormularioReservaProps {
   slot: Slot;

@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { Slot } from "../types/agenda";
+import { Slot } from "../types/Agenda";
 
 interface GradeHorariosProps {
   diasCabecalho: Date[];

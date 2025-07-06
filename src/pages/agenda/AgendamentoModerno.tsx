@@ -7,18 +7,20 @@ import LinkPersonalizado from "./components/LinkPersonalizado";
 import LegendaCores from "./components/LegendaCores";
 import SemanaAccordion from "./components/SemanaAccordion";
 import PainelProfissional from "./components/PainelProfissional";
-import { Slot, StatusSlot, Reserva } from "./types/agenda";
+import { Slot, StatusSlot, Reserva } from "./types/Agenda";
 
 const AgendamentoModerno: React.FC = () => {
   const [anoSelecionado, setAnoSelecionado] = useState("2025");
   const [mesSelecionado, setMesSelecionado] = useState("1");
   const [slots, setSlots] = useState<Slot[]>([]);
   const [reservas] = useState<Reserva[]>([]);
-  const [linkPersonalizado] = useState("https://seuapp.com/maria");
   const [horariosDisponiveis, setHorariosDisponiveis] = useState<string[]>([
     "07:00","08:00","09:00","10:00","11:00",
     "12:00","13:00","14:00","15:00","16:00","17:00",
   ]);
+
+  // Ajuste aqui: defina o profissionalId (você pode buscar depois do backend/autenticação)
+  const profissionalId = "maria"; // Coloque aqui o ID do profissional que desejar!
 
   const mesAtual = new Date(
     Number(anoSelecionado),
@@ -27,7 +29,7 @@ const AgendamentoModerno: React.FC = () => {
   );
   const semanas = eachWeekOfInterval(
     { start: startOfMonth(mesAtual), end: endOfMonth(mesAtual) },
-    { weekStartsOn: 1, locale: ptBR } // ← começa na segunda
+    { weekStartsOn: 1, locale: ptBR } // começa na segunda
   );
 
   const alterarStatusSlot = (slotId: string, novo: StatusSlot) => {
@@ -53,11 +55,6 @@ const AgendamentoModerno: React.FC = () => {
     setHorariosDisponiveis((h) => [...h, nova]);
   };
 
-  const copiarLink = () => {
-  navigator.clipboard.writeText(linkPersonalizado);
-  alert("Link copiado!");
-};
-
   return (
     <div className="space-y-4">
       <Card>
@@ -71,10 +68,7 @@ const AgendamentoModerno: React.FC = () => {
             onAnoChange={setAnoSelecionado}
             onMesChange={setMesSelecionado}
           />
-          <LinkPersonalizado 
-          linkPersonalizado={linkPersonalizado}
-          onCopiarLink={copiarLink}
-          />
+          <LinkPersonalizado profissionalId={profissionalId} />
           <LegendaCores />
         </CardContent>
       </Card>

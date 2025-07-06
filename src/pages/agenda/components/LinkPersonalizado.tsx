@@ -1,22 +1,28 @@
-
+import React from "react";
 import { Button } from "@/components/ui/button";
 
 interface LinkPersonalizadoProps {
-  linkPersonalizado: string;
-  onCopiarLink: () => void;
+  profissionalId: string;
 }
 
-const LinkPersonalizado = ({ linkPersonalizado, onCopiarLink }: LinkPersonalizadoProps) => {
+const LinkPersonalizado: React.FC<LinkPersonalizadoProps> = ({ profissionalId }) => {
+  const url = `${window.location.origin}/book/${profissionalId}`;
+
+  const onCopiarLink = () => {
+    navigator.clipboard.writeText(url);
+    alert("Link copiado!");
+  };
+
   return (
     <div className="mb-6 p-4 bg-blue-50 rounded-lg">
       <div className="flex items-center justify-between">
         <div>
           <h3 className="font-medium text-gray-800">Seu Link de Agendamento</h3>
-          <p className="text-sm text-gray-600 break-all">{linkPersonalizado}</p>
+          <p className="text-sm text-gray-600 break-all">{url}</p>
         </div>
         <Button
           onClick={onCopiarLink}
-          style={{ backgroundColor: '#7B539D', color: 'white' }}
+          style={{ backgroundColor: "#7B539D", color: "white" }}
           size="sm"
         >
           Copiar Link
