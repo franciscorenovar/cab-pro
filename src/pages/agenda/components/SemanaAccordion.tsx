@@ -13,7 +13,7 @@ import {
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import GradeHorarios from "./GradeHorarios";
-import { Slot, StatusSlot } from "../types/Agenda";
+import { Slot, StatusSlot } from "../types/agenda";
 
 interface SemanaAccordionProps {
   semanas: Date[];

@@ -7,7 +7,7 @@ import LinkPersonalizado from "./components/LinkPersonalizado";
 import LegendaCores from "./components/LegendaCores";
 import SemanaAccordion from "./components/SemanaAccordion";
 import PainelProfissional from "./components/PainelProfissional";
-import { Slot, StatusSlot, Reserva } from "./types/Agenda";
+import { Slot, StatusSlot, Reserva } from "./types/agenda";
 
 const AgendamentoModerno: React.FC = () => {
   const [anoSelecionado, setAnoSelecionado] = useState("2025");
