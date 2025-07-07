@@ -25,13 +25,13 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Rotas de autenticação */}
-          <Route path="/login" element={<Login />} />
+          {/* Rota principal - Login */}
+          <Route path="/" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/recuperar-senha" element={<RecuperarSenha />} />
           
-          {/* Rota principal - Dashboard */}
-          <Route path="/" element={<Index />} />
+          {/* Dashboard */}
+          <Route path="/dashboard" element={<Index />} />
           
           {/* Rotas dos módulos */}
           <Route path="/precificacao" element={<Precificacao />} />
