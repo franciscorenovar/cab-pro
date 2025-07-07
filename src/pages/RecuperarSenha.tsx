@@ -27,44 +27,46 @@ const RecuperarSenha = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F8F9FA' }}>
-      <div className="w-full max-w-sm">
-        <div className="bg-white rounded-lg shadow-sm border p-8">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="w-full max-w-md">
+        <div className="bg-card rounded-lg shadow-sm border border-border p-8">
           {/* Logo */}
-          <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: '#7B539D' }}>
+          <div className="flex justify-center mb-8">
+            <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
               <span className="text-white font-bold text-2xl">C</span>
             </div>
           </div>
 
           {/* Título */}
-          <div className="text-center mb-6">
-            <h1 className="text-2xl font-semibold text-gray-800 mb-2">Recuperar senha</h1>
-            <p className="text-gray-600 text-sm">Informe seu e-mail para receber instruções</p>
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-semibold text-foreground mb-2">
+              Recuperar senha
+            </h1>
+            <p className="text-muted-foreground text-sm">
+              Informe seu e-mail para receber instruções
+            </p>
           </div>
 
           {/* Formulário */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div>
-              <Label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sm font-medium text-foreground">
                 E-mail
               </Label>
               <Input
                 id="email"
                 type="email"
                 {...register("email")}
-                className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                style={{ fontSize: '16px' }}
+                className="w-full h-12 px-4 text-base border-input focus:border-primary focus:ring-primary"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                <p className="text-destructive text-sm">{errors.email.message}</p>
               )}
             </div>
 
             <Button 
               type="submit" 
-              className="w-full py-3 text-white font-medium rounded-md hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: '#7B539D', fontSize: '16px' }}
+              className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-base"
             >
               Enviar instruções
             </Button>
@@ -74,8 +76,7 @@ const RecuperarSenha = () => {
           <div className="text-center mt-6">
             <Link 
               to="/login" 
-              className="text-sm hover:underline"
-              style={{ color: '#7B539D' }}
+              className="text-sm text-primary hover:underline"
             >
               Voltar para o login
             </Link>
@@ -84,7 +85,7 @@ const RecuperarSenha = () => {
 
         {/* Rodapé */}
         <div className="text-center mt-8">
-          <p className="text-gray-500 text-sm">
+          <p className="text-muted-foreground text-sm">
             © 2025 Cab Pro. Todos os direitos reservados.
           </p>
         </div>

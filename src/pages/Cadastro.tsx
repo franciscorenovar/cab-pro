@@ -43,42 +43,45 @@ const Cadastro = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F8F9FA' }}>
-      <div className="w-full max-w-sm">
-        <div className="bg-white rounded-lg shadow-sm border p-8">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="w-full max-w-md">
+        <div className="bg-card rounded-lg shadow-sm border border-border p-8">
           {/* Logo */}
-          <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: '#7B539D' }}>
+          <div className="flex justify-center mb-8">
+            <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
               <span className="text-white font-bold text-2xl">C</span>
             </div>
           </div>
 
           {/* Título */}
-          <div className="text-center mb-6">
-            <h1 className="text-2xl font-semibold text-gray-800 mb-2">Criar uma conta</h1>
-            <p className="text-gray-600 text-sm">Preencha os dados para se cadastrar</p>
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-semibold text-foreground mb-2">
+              Criar uma conta
+            </h1>
+            <p className="text-muted-foreground text-sm">
+              Preencha os dados para se cadastrar
+            </p>
           </div>
 
           {/* Formulário */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div>
-              <Label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sm font-medium text-foreground">
                 E-mail
               </Label>
               <Input
                 id="email"
                 type="email"
                 {...register("email")}
-                className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                style={{ fontSize: '16px' }}
+                className="w-full h-12 px-4 text-base border-input focus:border-primary focus:ring-primary"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                <p className="text-destructive text-sm">{errors.email.message}</p>
               )}
             </div>
 
-            <div>
-              <Label htmlFor="chaveAcesso" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="space-y-2">
+              <Label htmlFor="chaveAcesso" className="text-sm font-medium text-foreground">
                 Chave de Acesso
               </Label>
               <Input
@@ -86,16 +89,15 @@ const Cadastro = () => {
                 type="text"
                 placeholder="CABPRO-XXXX-XXXX-XXXX"
                 {...register("chaveAcesso")}
-                className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                style={{ fontSize: '16px' }}
+                className="w-full h-12 px-4 text-base border-input focus:border-primary focus:ring-primary"
               />
               {errors.chaveAcesso && (
-                <p className="text-red-500 text-sm mt-1">{errors.chaveAcesso.message}</p>
+                <p className="text-destructive text-sm">{errors.chaveAcesso.message}</p>
               )}
             </div>
 
-            <div>
-              <Label htmlFor="senha" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="space-y-2">
+              <Label htmlFor="senha" className="text-sm font-medium text-foreground">
                 Senha (mínimo 6 caracteres)
               </Label>
               <div className="relative">
@@ -103,30 +105,29 @@ const Cadastro = () => {
                   id="senha"
                   type={showPassword ? "text" : "password"}
                   {...register("senha")}
-                  className="w-full px-3 py-3 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  style={{ fontSize: '16px' }}
+                  className="w-full h-12 px-4 pr-12 text-base border-input focus:border-primary focus:ring-primary"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-transparent"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-4 w-4 text-gray-400" />
+                    <EyeOff className="h-4 w-4 text-muted-foreground" />
                   ) : (
-                    <Eye className="h-4 w-4 text-gray-400" />
+                    <Eye className="h-4 w-4 text-muted-foreground" />
                   )}
                 </Button>
               </div>
               {errors.senha && (
-                <p className="text-red-500 text-sm mt-1">{errors.senha.message}</p>
+                <p className="text-destructive text-sm">{errors.senha.message}</p>
               )}
             </div>
 
-            <div>
-              <Label htmlFor="confirmarSenha" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="space-y-2">
+              <Label htmlFor="confirmarSenha" className="text-sm font-medium text-foreground">
                 Confirmar senha
               </Label>
               <div className="relative">
@@ -134,32 +135,30 @@ const Cadastro = () => {
                   id="confirmarSenha"
                   type={showConfirmPassword ? "text" : "password"}
                   {...register("confirmarSenha")}
-                  className="w-full px-3 py-3 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  style={{ fontSize: '16px' }}
+                  className="w-full h-12 px-4 pr-12 text-base border-input focus:border-primary focus:ring-primary"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-transparent"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-transparent"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
-                    <EyeOff className="h-4 w-4 text-gray-400" />
+                    <EyeOff className="h-4 w-4 text-muted-foreground" />
                   ) : (
-                    <Eye className="h-4 w-4 text-gray-400" />
+                    <Eye className="h-4 w-4 text-muted-foreground" />
                   )}
                 </Button>
               </div>
               {errors.confirmarSenha && (
-                <p className="text-red-500 text-sm mt-1">{errors.confirmarSenha.message}</p>
+                <p className="text-destructive text-sm">{errors.confirmarSenha.message}</p>
               )}
             </div>
 
             <Button 
               type="submit" 
-              className="w-full py-3 text-white font-medium rounded-md hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: '#7B539D', fontSize: '16px' }}
+              className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-base"
             >
               Cadastrar
             </Button>
@@ -168,8 +167,7 @@ const Cadastro = () => {
           {/* Botão Adquirir Chave */}
           <Button 
             onClick={handleAdquirirChave}
-            className="w-full py-3 mt-4 font-medium rounded-md hover:opacity-90 transition-opacity"
-            style={{ backgroundColor: '#D2B360', color: 'white', fontSize: '16px' }}
+            className="w-full h-12 mt-4 bg-accent hover:bg-accent/90 text-accent-foreground font-medium text-base"
           >
             Adquirir chave de acesso
           </Button>
@@ -178,8 +176,7 @@ const Cadastro = () => {
           <div className="text-center mt-6">
             <Link 
               to="/login" 
-              className="text-sm hover:underline"
-              style={{ color: '#7B539D' }}
+              className="text-sm text-primary hover:underline"
             >
               Já tenho uma conta
             </Link>
@@ -188,7 +185,7 @@ const Cadastro = () => {
 
         {/* Rodapé */}
         <div className="text-center mt-8">
-          <p className="text-gray-500 text-sm">
+          <p className="text-muted-foreground text-sm">
             © 2025 Cab Pro. Todos os direitos reservados.
           </p>
         </div>
