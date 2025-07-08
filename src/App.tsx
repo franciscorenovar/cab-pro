@@ -15,6 +15,7 @@ import Receitas from "./pages/Receitas";
 import Lancamentos from "./pages/Lancamentos";
 import AgendamentoCliente from "./pages/AgendamentoCliente";
 import NotFound from "./pages/NotFound";
+import AdminDashboard from "./pages/admin/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,9 @@ const App = () => (
           
           {/* rota de reserva do cliente */}
           <Route path="/book/:profissionalId" element={<BookingPage />} />
+          
+          {/* Painel administrativo */}
+          <Route path="/admin" element={<AdminDashboard />} />
           
           {/* Rota curinga */}
           <Route path="*" element={<NotFound />} />
